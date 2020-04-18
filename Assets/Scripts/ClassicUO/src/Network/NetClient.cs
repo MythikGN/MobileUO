@@ -28,6 +28,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+using NativeWebSocket;
 
 namespace ClassicUO.Network
 {
@@ -37,12 +38,13 @@ namespace ClassicUO.Network
         private int _incompletePacketLength;
         private bool _isCompressionEnabled;
         private byte[] _recvBuffer, _incompletePacketBuffer, _decompBuffer;
-        private Socket _socket;
+        //private Socket _socket;
         private CircularBuffer _circularBuffer;
         private SocketAsyncEventArgs _recvEventArgs;
         private ConcurrentQueue<Packet> _recvQueue = new ConcurrentQueue<Packet>();
         private bool _connectAsync;
 
+        private WebSocket _socket;
         private NetClient(bool connectAsync)
         {
             _connectAsync = connectAsync;
@@ -53,7 +55,7 @@ namespace ClassicUO.Network
 
         public static NetClient Socket { get; } = new NetClient(false);
 
-        public bool IsConnected => _socket != null && _socket.Connected;
+        public bool IsConnected => _socket != null && _socket.State == WebSocketState.Open;
 
         public bool IsDisposed { get; private set; }
 
@@ -63,18 +65,8 @@ namespace ClassicUO.Network
         {
             get
             {
-                IPHostEntry localEntry = Dns.GetHostEntry(Dns.GetHostName());
-                uint address;
 
-                if (localEntry.AddressList.Length > 0)
-                {
-#pragma warning disable 618
-                    address = (uint)localEntry.AddressList.FirstOrDefault(s => s.AddressFamily == AddressFamily.InterNetwork).Address;
-#pragma warning restore 618
-                }
-                else
-                    address = 0x100007f;
-
+                uint address = 0x100007f;
                 return ((address & 0xff) << 0x18) | ((address & 65280) << 8) | ((address >> 8) & 65280) | ((address >> 0x18) & 0xff);
             }
         }
@@ -104,13 +96,13 @@ namespace ClassicUO.Network
         public bool Connect(string ip, ushort port)
         {
             IsDisposed = false;
-            IPAddress address = ResolveIP(ip);
+            //IPAddress address = ResolveIP(ip);
 
-            if (address == null)
-                return false;
+           // if (address == null)
+           //     return false;
 
-            IPEndPoint endpoint = new IPEndPoint(address, port);
-            Connect(endpoint);
+            //IPEndPoint endpoint = new IPEndPoint(address, port);
+            Connect(null);
 
             return true;
         }
@@ -118,35 +110,37 @@ namespace ClassicUO.Network
         public void Connect(IPAddress address, ushort port)
         {
             IsDisposed = false;
-            IPEndPoint endpoint = new IPEndPoint(address, port);
-            Connect(endpoint);
+           // IPEndPoint endpoint = new IPEndPoint(address, port);
+            Connect(null);
         }
 
         private void Connect(IPEndPoint endpoint)
         {
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { ReceiveBufferSize = BUFF_SIZE };
-            _socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, 1);
+            _socket = new WebSocket("ws://127.0.0.1:3001");
+            Log.Trace("WS Created");
+            //_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) { ReceiveBufferSize = BUFF_SIZE };
+            //_socket.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.NoDelay, 1);
             _recvBuffer = new byte[BUFF_SIZE];
             _incompletePacketBuffer = new byte[BUFF_SIZE];
             _decompBuffer = new byte[BUFF_SIZE];
             _circularBuffer = new CircularBuffer();
             _recvEventArgs = new SocketAsyncEventArgs();
-            _recvEventArgs.Completed += IO_Socket;
-            _recvEventArgs.SetBuffer(_recvBuffer, 0, _recvBuffer.Length);
+            //_recvEventArgs.Completed += IO_Socket;
+           // _recvEventArgs.SetBuffer(_recvBuffer, 0, _recvBuffer.Length);
             _recvQueue = new ConcurrentQueue<Packet>();
             Statistics.Reset();
 
-            _socket.ReceiveTimeout = -1;
-            _socket.SendTimeout = -1;
+            //_socket.ReceiveTimeout = -1;
+            //_socket.SendTimeout = -1;
 
-            if (_connectAsync)
+            /*if (_connectAsync)
             {
                 Task.Run(() =>
                 {
                     InternalConnect(endpoint);
                 });
             }
-            else
+            else*/
             {
                 InternalConnect(endpoint);
             }
@@ -156,13 +150,21 @@ namespace ClassicUO.Network
         {
             try
             {
-                _socket.Connect(endpoint);
-
-                if (_socket.Connected)
+                _socket.OnOpen += () =>
                 {
                     Connected.Raise();
                     Statistics.ConnectedFrom = DateTime.Now;
                     StartRecv();
+                    
+                };
+                _socket.OnMessage += data => { _recvBuffer = data; Log.Trace("OnMessage callback");
+                    ProcessRecv(_recvEventArgs); };
+                _socket.Connect().Wait();
+                Log.Trace("Internal connect finished Connect()" + _socket.State);
+
+                //if (_socket.State == WebSocketState.Open)
+                {
+
                 }
             }
             catch (SocketException e)
@@ -189,7 +191,7 @@ namespace ClassicUO.Network
 
             try
             {
-                _socket.Shutdown(SocketShutdown.Both);
+                _socket.Close().Wait();
             }
             catch
             {
@@ -431,7 +433,16 @@ namespace ClassicUO.Network
                     //LogPacket(data, true);
 #endif
 
-                    int sent = _socket.Send(data, 0, length, SocketFlags.None);
+                    int sent = length;
+
+                    if (data.Length != length)
+                    {
+                        _socket.Send(new ArraySegment<byte>(data, 0, length).Array).Wait();
+                    }
+                    else
+                    {
+                        _socket.Send(data).Wait();
+                    }
 
                     if (sent > 0)
                     {
@@ -470,13 +481,16 @@ namespace ClassicUO.Network
 
         private void StartRecv()
         {
+            Log.Trace("Start Recv");
+
+            return;
             try
             {
                 bool ok = false;
 
                 do
                 {
-                    ok = !_socket.ReceiveAsync(_recvEventArgs);
+                   // ok = !_socket.Receive();
 
                     if (ok)
                         ProcessRecv(_recvEventArgs);
@@ -496,13 +510,15 @@ namespace ClassicUO.Network
 
         private void ProcessRecv(SocketAsyncEventArgs e)
         {
-            int bytesLen = e.BytesTransferred;
+            Log.Trace("ProcessRecv");
+
+            int bytesLen = _recvBuffer.Length;
 
             if (_circularBuffer != null)
             {
                 if (bytesLen > 0)
                 {
-                    if (e.SocketError == SocketError.Success)
+                    if (true)
                     {
                         Statistics.TotalBytesReceived += (uint) bytesLen;
 
