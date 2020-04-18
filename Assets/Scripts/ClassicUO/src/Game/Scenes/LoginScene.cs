@@ -25,7 +25,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Linq;
-
+using System.Threading;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
 using ClassicUO.Game.Data;
@@ -606,10 +606,13 @@ namespace ClassicUO.Game.Scenes
             uint seed = p.ReadUInt();
             NetClient.LoginSocket.Disconnect();
             NetClient.Socket.Connect(new IPAddress(ip), port);
-            NetClient.Socket.EnableCompression();
-            byte[] ss = new byte[4] {(byte) (seed >> 24), (byte) (seed >> 16), (byte) (seed >> 8), (byte) seed};
-            NetClient.Socket.Send(ss);
-            NetClient.Socket.Send(new PSecondLogin(Account, Password, seed));
+            NetClient.Socket.Connected += (sender, args) => {  
+                NetClient.Socket.EnableCompression();
+                byte[] ss = new byte[4] {(byte) (seed >> 24), (byte) (seed >> 16), (byte) (seed >> 8), (byte) seed};
+                NetClient.Socket.Send(ss);
+                NetClient.Socket.Send(new PSecondLogin(Account, Password, seed)); };
+
+          
         }
 
         private void ParseServerList(Packet reader)
