@@ -194,9 +194,9 @@ public class UnityMain : MonoBehaviour
 	    }
 	    else
 	    {
-		    Settings.GlobalSettings.UltimaOnlineDirectory = config.ClientPathForUnityEditor;
+		    Settings.GlobalSettings.UltimaOnlineDirectory = Application.persistentDataPath;
 		    //Empty client version loaded from settings.json so that CUO detects the actual version from client.exe
-		    Settings.GlobalSettings.ClientVersion = "";
+		    Settings.GlobalSettings.ClientVersion = config.ClientVersion;
 	    }
 
 	    //This flag is tied to whether the GameCursor gets drawn, in a convoluted way

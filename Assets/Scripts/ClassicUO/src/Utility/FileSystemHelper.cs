@@ -22,6 +22,7 @@
 using System;
 using System.IO;
 using System.Text;
+using UnityEngine;
 
 namespace ClassicUO.Utility
 {
@@ -52,8 +53,17 @@ namespace ClassicUO.Utility
 
         public static void EnsureFileExists(string path)
         {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+                return;
             if (!File.Exists(path))
                 throw new FileNotFoundException(path);
+        }
+        
+        public static bool FileExists(string path)
+        {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+                return true;
+            return File.Exists(path);
         }
 
 

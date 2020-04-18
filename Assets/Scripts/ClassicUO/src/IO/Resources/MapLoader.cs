@@ -33,7 +33,7 @@ namespace ClassicUO.IO.Resources
 {
     internal class MapLoader : UOFileLoader
     {
-        internal static int MAPS_COUNT = 6;
+        internal static int MAPS_COUNT = 2;
         private protected readonly UOFileMul[] _filesIdxStatics = new UOFileMul[MAPS_COUNT];
         private protected readonly UOFile[] _filesMap = new UOFile[MAPS_COUNT];
         private protected readonly UOFileMul[] _filesStatics = new UOFileMul[MAPS_COUNT];
@@ -112,7 +112,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+           // return Task.Run(() =>
             {
                 bool foundOneMap = false;
 
@@ -120,18 +120,18 @@ namespace ClassicUO.IO.Resources
                 {
                     string path = UOFileManager.GetUOFilePath($"map{i}LegacyMUL.uop");
 
-                    if (File.Exists(path))
+                    /*if (FileSystemHelper.FileExists(path))
                     {
                         _filesMap[i] = new UOFileUop(path, $"build/map{i}legacymul/{{0:D8}}.dat");
                         Entries[i] = new UOFileIndex[((UOFileUop) _filesMap[i]).TotalEntriesCount];
                         ((UOFileUop)_filesMap[i]).FillEntries(ref Entries[i], false);
                         foundOneMap = true;
                     }
-                    else
+                    else*/
                     {
                         path = UOFileManager.GetUOFilePath($"map{i}.mul");
 
-                        if (File.Exists(path))
+                        if (FileSystemHelper.FileExists(path))
                         {
                             _filesMap[i] = new UOFileMul(path);
 
@@ -140,7 +140,7 @@ namespace ClassicUO.IO.Resources
 
                         path = UOFileManager.GetUOFilePath($"mapdifl{i}.mul");
 
-                        if (File.Exists(path))
+                        if (FileSystemHelper.FileExists(path))
                         {
                             _mapDifl[i] = new UOFileMul(path);
                             _mapDif[i] = new UOFileMul(UOFileManager.GetUOFilePath($"mapdif{i}.mul"));
@@ -151,9 +151,9 @@ namespace ClassicUO.IO.Resources
                     }
                     
                     path = UOFileManager.GetUOFilePath($"statics{i}.mul");
-                    if (File.Exists(path)) _filesStatics[i] = new UOFileMul(path);
+                    if (FileSystemHelper.FileExists(path)) _filesStatics[i] = new UOFileMul(path);
                     path = UOFileManager.GetUOFilePath($"staidx{i}.mul");
-                    if (File.Exists(path)) _filesIdxStatics[i] = new UOFileMul(path);
+                    if (FileSystemHelper.FileExists(path)) _filesIdxStatics[i] = new UOFileMul(path);
                 }
 
                 if (!foundOneMap)
@@ -181,7 +181,8 @@ namespace ClassicUO.IO.Resources
                 });
 
                 Entries = null;
-            });
+            }//);
+            return null;
         }
 
         public override void CleanResources()

@@ -200,33 +200,33 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 bool loaduop = false;
                 int[] un = { 0x40000, 0x10000, 0x20000, 0x20000, 0x20000 };
 
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     string pathmul = UOFileManager.GetUOFilePath("anim" + (i == 0 ? string.Empty : (i + 1).ToString()) + ".mul");
                     string pathidx = UOFileManager.GetUOFilePath("anim" + (i == 0 ? string.Empty : (i + 1).ToString()) + ".idx");
 
-                    if (File.Exists(pathmul) && File.Exists(pathidx))
+                    if (FileSystemHelper.FileExists(pathmul) && FileSystemHelper.FileExists(pathidx))
                     {
                         _files[i] = new UOFileMul(pathmul, pathidx, un[i], i == 0 ? 6 : -1);
                     }
 
-                    if (i > 0 && Client.Version >= ClientVersion.CV_7000)
+                    /*if (i > 0 && Client.Version >= ClientVersion.CV_7000)
                     {
                         string pathuop = UOFileManager.GetUOFilePath($"AnimationFrame{i}.uop");
 
-                        if (File.Exists(pathuop))
+                        if (FileSystemHelper.FileExists(pathuop))
                         {
                             _filesUop[i - 1] = new UOFileUop(pathuop, "build/animationlegacyframe/{0:D6}/{0:D2}.bin");
 
                             if (!loaduop)
                                 loaduop = true;
                         }
-                    }
+                    }*/
                 }
 
                 if (loaduop)
@@ -250,7 +250,7 @@ namespace ClassicUO.IO.Resources
                 {
                     string path = UOFileManager.GetUOFilePath("mobtypes.txt");
 
-                    if (File.Exists(path))
+                    if (FileSystemHelper.FileExists(path))
                     {
                         string[] typeNames = new string[5]
                         {
@@ -373,7 +373,7 @@ namespace ClassicUO.IO.Resources
 
                 string file = UOFileManager.GetUOFilePath("Anim1.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file))
                     {
@@ -388,7 +388,7 @@ namespace ClassicUO.IO.Resources
 
                 file = UOFileManager.GetUOFilePath("Anim2.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file))
                     {
@@ -402,8 +402,9 @@ namespace ClassicUO.IO.Resources
                 }
 
                 if (Client.Version < ClientVersion.CV_305D)
-                    return;
+                    return null;
 
+                return null;
                 file = UOFileManager.GetUOFilePath("Equipconv.def");
 
                 if (File.Exists(file))
@@ -647,7 +648,7 @@ namespace ClassicUO.IO.Resources
                         }
                     }
                 }
-            });
+            }//);
         }
 
         private void LoadUop()

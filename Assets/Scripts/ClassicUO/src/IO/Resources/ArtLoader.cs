@@ -29,7 +29,7 @@ using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
 using ClassicUO.Renderer;
-
+using ClassicUO.Utility;
 using Microsoft.Xna.Framework;
 
 namespace ClassicUO.IO.Resources
@@ -64,28 +64,29 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 string filepath = UOFileManager.GetUOFilePath("artLegacyMUL.uop");
 
-                if (File.Exists(filepath))
+                /*if (File.Exists(filepath))
                 {
                     _file = new UOFileUop(filepath, "build/artlegacymul/{0:D8}.tga");
                     Entries = new UOFileIndex[Constants.MAX_STATIC_DATA_INDEX_COUNT];
                 }
-                else
+                else*/
                 {
                     filepath = UOFileManager.GetUOFilePath("art.mul");
                     string idxpath = UOFileManager.GetUOFilePath("artidx.mul");
 
-                    if (File.Exists(filepath) && File.Exists(idxpath))
+                    if (FileSystemHelper.FileExists(filepath) && FileSystemHelper.FileExists(idxpath))
                     {
                         _file = new UOFileMul(filepath, idxpath, Constants.MAX_STATIC_DATA_INDEX_COUNT);
                     }
                 }
 
                 _file.FillEntries(ref Entries);
-            });
+            }//);
+            return null;
         }
 
         public override ArtTexture GetTexture(uint g)

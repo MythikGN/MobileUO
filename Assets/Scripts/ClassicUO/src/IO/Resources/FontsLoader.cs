@@ -103,16 +103,16 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 UOFileMul fonts = new UOFileMul(UOFileManager.GetUOFilePath("fonts.mul"));
                 UOFileMul[] uniFonts = new UOFileMul[20];
 
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 13; i++)
                 {
                     string path = UOFileManager.GetUOFilePath("unifont" + (i == 0 ? "" : i.ToString()) + ".mul");
 
-                    if (File.Exists(path))
+                    if (FileSystemHelper.FileExists(path))
                     {
                         uniFonts[i] = new UOFileMul(path);
                         _unicodeFontAddress[i] = uniFonts[i].StartAddress;
@@ -161,7 +161,7 @@ namespace ClassicUO.IO.Resources
                 {
                     FontCount = 0;
 
-                    return;
+                    return null;
                 }
 
                 _font = new FontCharacterData[FontCount][];
@@ -200,7 +200,8 @@ namespace ClassicUO.IO.Resources
                     if (_fontIndex[i] >= 0xE0)
                         _fontIndex[i] = _fontIndex[' '];
                 }
-            });
+            }//);
+             return null;
         }
 
         public override void CleanResources()

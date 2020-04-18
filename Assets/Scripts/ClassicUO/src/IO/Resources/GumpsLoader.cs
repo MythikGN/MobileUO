@@ -26,6 +26,8 @@ using System.Threading.Tasks;
 
 using ClassicUO.Game;
 using ClassicUO.Renderer;
+using ClassicUO.Utility;
+using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.IO.Resources
 {
@@ -54,24 +56,24 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() => {
+            //return Task.Run(() => {
 
                 string path = UOFileManager.GetUOFilePath("gumpartLegacyMUL.uop");
 
-                if (File.Exists(path))
+               /* if (File.Exists(path))
                 {
                     _file = new UOFileUop(path, "build/gumpartlegacymul/{0:D8}.tga", true);
                     Entries = new UOFileIndex[Constants.MAX_GUMP_DATA_INDEX_COUNT];
                     Client.UseUOPGumps = true;
                 }
-                else
+                else*/
                 {
                     //Changed these filenames to be all lower-case as it was causing problems with File.Exists on iOS
                     //Checked a few shard installations, these files seem to be all lower-case anyways
                     path = UOFileManager.GetUOFilePath("gumpart.mul");
                     string pathidx = UOFileManager.GetUOFilePath("gumpidx.mul");
 
-                    if (File.Exists(path) && File.Exists(pathidx))
+                    if (FileSystemHelper.FileExists(path) && FileSystemHelper.FileExists(pathidx))
                     {
                         _file = new UOFileMul(path, pathidx, Constants.MAX_GUMP_DATA_INDEX_COUNT, 12);
                     }
@@ -82,7 +84,7 @@ namespace ClassicUO.IO.Resources
                 string pathdef = UOFileManager.GetUOFilePath("gump.def");
 
                 if (!File.Exists(pathdef))
-                    return;
+                    return null;
 
                 using (DefReader defReader = new DefReader(pathdef, 3))
                 {
@@ -111,7 +113,8 @@ namespace ClassicUO.IO.Resources
                         }
                     }
                 }
-            });
+                return null;
+            //});
         }
 
         public override UOTexture16 GetTexture(uint g)

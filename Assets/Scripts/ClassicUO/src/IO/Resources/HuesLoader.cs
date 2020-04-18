@@ -60,7 +60,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 string path = UOFileManager.GetUOFilePath("hues.mul");
 
@@ -84,7 +84,8 @@ namespace ClassicUO.IO.Resources
                 RadarCol = radarcol.ReadArray<ushort>((int) radarcol.Length >> 1);
                 file.Dispose();
                 radarcol.Dispose();
-            });
+            }//);
+            return null;
         }
 
 

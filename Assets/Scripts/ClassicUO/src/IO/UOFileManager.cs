@@ -31,6 +31,7 @@ using ClassicUO.Data;
 using ClassicUO.Game;
 using ClassicUO.IO.Resources;
 using ClassicUO.Utility.Logging;
+using UnityEngine;
 
 namespace ClassicUO.IO
 {
@@ -38,38 +39,48 @@ namespace ClassicUO.IO
     {
         public static string GetUOFilePath(string file)
         {
-            return Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, file);
+            return Path.Combine(_path, file);
         }
 
+        private static string _path;
 
         public static void Load()
         {
+            _path = Path.Combine(Application.persistentDataPath,"New Server Configuration");
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             List<Task> tasks = new List<Task>
             {
-                AnimationsLoader.Instance.Load(),
-                AnimDataLoader.Instance.Load(),
-                ArtLoader.Instance.Load(),
-                MapLoader.Instance.Load(),
+                //AnimationsLoader.Instance.Load(),
+                //AnimDataLoader.Instance.Load(),
+                //ArtLoader.Instance.Load(),
+                //MapLoader.Instance.Load(),
                 ClilocLoader.Instance.Load(Settings.GlobalSettings.ClilocFile),
-                GumpsLoader.Instance.Load(),
+                //GumpsLoader.Instance.Load(),
                 FontsLoader.Instance.Load(),
                 HuesLoader.Instance.Load(),
-                TileDataLoader.Instance.Load(),
-                MultiLoader.Instance.Load(),
-                SkillsLoader.Instance.Load().ContinueWith(t => ProfessionLoader.Instance.Load()),
-                TexmapsLoader.Instance.Load(),
-                SpeechesLoader.Instance.Load(),
-                LightsLoader.Instance.Load(),
-                SoundsLoader.Instance.Load(),
-                MultiMapLoader.Instance.Load()
+                //TileDataLoader.Instance.Load(),
+                //MultiLoader.Instance.Load(),
+                //SkillsLoader.Instance.Load().ContinueWith(t => ProfessionLoader.Instance.Load()),
+                //TexmapsLoader.Instance.Load(),
+                //SpeechesLoader.Instance.Load(),
+                //LightsLoader.Instance.Load(),
+                //SoundsLoader.Instance.Load(),
+                //MultiMapLoader.Instance.Load()
             };
-
-            if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(10)))
+            //TODO any of these cause
+           //ArtLoader.Instance.Load();
+           //AnimationsLoader.Instance.Load();
+           //MapLoader.Instance.Load();
+           
+           //The below ones work fine, seems like when trying to memorymap a file close or over 100mb it fail
+           GumpsLoader.Instance.Load();
+            FontsLoader.Instance.Load();//.Wait(10000);
+            HuesLoader.Instance.Load();//.Wait(10000);
+            /*if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(240)))
             {
                 Log.Panic("Loading files timeout.");
-            }
+            }*/
 
 
             var verdata = Verdata.File;

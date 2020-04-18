@@ -50,7 +50,7 @@ namespace ClassicUO.IO
 
             FileInfo fileInfo = new FileInfo(FilePath);
 
-            if (!fileInfo.Exists)
+            if (!FileSystemHelper.FileExists(FilePath))
             {
                 Log.Error( $"{FilePath}  not exists.");
 
