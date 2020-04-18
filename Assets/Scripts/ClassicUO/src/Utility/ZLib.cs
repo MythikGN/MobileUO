@@ -20,7 +20,9 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using zlib;
 
 namespace ClassicUO.Utility
 {
@@ -28,8 +30,31 @@ namespace ClassicUO.Utility
     {
         public static void Decompress(IntPtr source, int sourceLength, int offset, IntPtr dest, int length)
         {
-            uncompress(dest, ref length, source, sourceLength - offset);
+            var byteArray = new byte[sourceLength];
+            System.Runtime.InteropServices.Marshal.Copy(source, byteArray, 0, sourceLength);
+            //uncompress(dest, ref length, source, sourceLength - offset);
+            using (MemoryStream outMemoryStream = new MemoryStream())
+            using (ZOutputStream outZStream = new ZOutputStream(outMemoryStream))
+            using (Stream inMemoryStream = new MemoryStream(byteArray))
+            {
+                CopyStream(inMemoryStream, outZStream);
+                outZStream.finish();
+                var outData = outMemoryStream.ToArray();
+                Marshal.Copy(outData,0,dest,outData.Length);
+                length = outData.Length;
+            }
         }
+
+        public static void CopyStream(System.IO.Stream input, System.IO.Stream output)
+        {
+            byte[] buffer = new byte[2000];
+            int len;
+            while ((len = input.Read(buffer, 0, 2000)) > 0)
+            {
+                output.Write(buffer, 0, len);
+            }
+            output.Flush();
+        } 
 
         #if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
         [DllImport("zlib")]
