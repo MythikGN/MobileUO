@@ -69,7 +69,7 @@ namespace ClassicUO.IO
                 //MultiMapLoader.Instance.Load()
             };
             //TODO any of these cause
-           //ArtLoader.Instance.Load();
+           ArtLoader.Instance.Load();
            //AnimationsLoader.Instance.Load();
            //MapLoader.Instance.Load();
            
