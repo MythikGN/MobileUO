@@ -404,10 +404,10 @@ namespace ClassicUO.IO.Resources
                 if (Client.Version < ClientVersion.CV_305D)
                     return null;
 
-                return null;
+
                 file = UOFileManager.GetUOFilePath("Equipconv.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file, 5))
                     {
@@ -455,7 +455,7 @@ namespace ClassicUO.IO.Resources
 
                 file = UOFileManager.GetUOFilePath("Bodyconv.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file))
                     {
@@ -584,7 +584,7 @@ namespace ClassicUO.IO.Resources
 
                 file = UOFileManager.GetUOFilePath("Body.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file, 1))
                     {
@@ -617,7 +617,7 @@ namespace ClassicUO.IO.Resources
 
                 file = UOFileManager.GetUOFilePath("Corpse.def");
 
-                if (File.Exists(file))
+                if (FileSystemHelper.FileExists(file))
                 {
                     using (DefReader defReader = new DefReader(file, 1))
                     {
@@ -648,6 +648,8 @@ namespace ClassicUO.IO.Resources
                         }
                     }
                 }
+
+                return null;
             }//);
         }
 

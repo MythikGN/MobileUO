@@ -200,8 +200,9 @@ namespace ClassicUO.IO.Resources
                     if (_fontIndex[i] >= 0xE0)
                         _fontIndex[i] = _fontIndex[' '];
                 }
+                return null;
             }//);
-             return null;
+             
         }
 
         public override void CleanResources()

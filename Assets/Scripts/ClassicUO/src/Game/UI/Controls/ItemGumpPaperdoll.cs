@@ -135,7 +135,7 @@ namespace ClassicUO.Game.UI.Controls
             if (Texture == null)
             {
                 if (item.Layer != Layer.Face)
-                    Log.Error( $"No texture found for Item ({item.Serial.ToHex()}) {item.Graphic.ToHex()} {item.ItemData.Name} {item.Layer}");
+                    Log.Error( $"No texture found for Item );// Causes a nullpointer exception ({item.Serial.ToHex()}) {item.Graphic.ToHex()} {item.ItemData.Name} {item.Layer}");
                 Dispose();
 
                 return;

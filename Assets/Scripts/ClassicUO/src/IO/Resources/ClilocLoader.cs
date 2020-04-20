@@ -57,7 +57,7 @@ namespace ClassicUO.IO.Resources
         {
             _cliloc = cliloc;
 
-            if (!File.Exists(UOFileManager.GetUOFilePath(cliloc)))
+            if (!FileSystemHelper.FileExists(UOFileManager.GetUOFilePath(cliloc)))
                 _cliloc = "Cliloc.enu";
 
             return Load();
@@ -67,11 +67,11 @@ namespace ClassicUO.IO.Resources
         {
             return Task.Run(() => {
                 if (string.IsNullOrEmpty(_cliloc))
-                    _cliloc = "Cliloc.enu";
+                    _cliloc = "cliloc.enu";
 
                 string path = UOFileManager.GetUOFilePath(_cliloc);
 
-                if (!File.Exists(path))
+                if (!FileSystemHelper.FileExists(path))
                     return;
 
                 using (BinaryReader reader = new BinaryReader(new FileStream(path, FileMode.Open, FileAccess.Read)))

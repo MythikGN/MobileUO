@@ -65,19 +65,31 @@ public class DownloadState : IState
 
         }
     }
-        private static string[] Files = new[] {"Anim1.def","Anim2.def", "mobtypes.txt", "unifont1.mul","unifont2.mul","unifont3.mul","unifont4.mul","unifont5.mul","unifont6.mul","unifont7.mul","unifont8.mul","unifont9.mul","unifont10.mul","unifont11.mul","unifont12.mul","anim.idx","map0.mul","mapdif0.mul", "mapdifl0.mul","cliloc.enu","statics0.mul","staidx0.mul", "anim.mul",/*"sound.mul","soundidx.mul", */"light.mul","lightidx.mul", "speech.mul", "unifont.mul", "texidx.mul", "texmaps.mul", "multi.mul","multi.idx","tiledata.mul","radarcol.mul","hues.mul","fonts.mul", "stadifl0.mul", "stadifi0.mul", "stadif0.mul","gumpart.mul", "gumpidx.mul", "art.mul","artidx.mul"};
+        private static string[] Files = new[] {"Anim1.def","Anim2.def", "mobtypes.txt", 
+            "unifont1.mul","unifont2.mul","unifont3.mul","unifont4.mul","unifont5.mul","unifont6.mul","unifont7.mul","unifont8.mul","unifont9.mul","unifont10.mul","unifont11.mul","unifont12.mul",
+            "anim.idx","map0.mul","mapdif0.mul", "mapdifl0.mul","cliloc.enu","statics0.mul","staidx0.mul", "anim.mul",/*"sound.mul","soundidx.mul", */
+            "light.mul","lightidx.mul", "speech.mul", "unifont.mul", "texidx.mul", "texmaps.mul", "multi.mul","multi.idx","tiledata.mul",
+            "radarcol.mul","hues.mul","fonts.mul", "stadifl0.mul", "stadifi0.mul", "stadif0.mul","gumpart.mul", "gumpidx.mul", "art.mul","artidx.mul",
+            "art.def", "skills.mul","Skills.idx","Prof.txt",
+            "Multimap.rle", "facet00.mul","TexTerr.def",
+            "Anim1.def", "Anim2.def","Equipconv.def","Bodyconv.def","Body.def","Corpse.def","animdata.mul"
+            
+        };
 
     private IEnumerator DownloadFiles(List<string> filesList)
     {
         int index = 0;
 
+        
         var pathToSaveFiles = serverConfiguration.GetPathToSaveFiles();
         var directoryInfo = new DirectoryInfo(pathToSaveFiles);
         if (directoryInfo.Exists == false)
         {
             directoryInfo.Create();
         }
-
+       /* foreach(var f in filesList.ToArray())
+            if (!File.Exists(Path.Combine(pathToSaveFiles, f)))
+                filesList.Remove(f);*/
         while (index < filesList.Count)
         {
             while (concurrentDownloadCounter < maxConcurrentDownloads && index < filesList.Count)
@@ -86,6 +98,8 @@ public class DownloadState : IState
                 var uriBuilder = new UriBuilder("http",serverConfiguration.FileDownloadServerUrl,8080, fileName);
                 var request = UnityWebRequest.Get(uriBuilder.Uri);
                 var filePath = Path.Combine(pathToSaveFiles, fileName);
+              
+                
                 var fileDownloadHandler = new DownloadHandlerFile(filePath);
                 fileDownloadHandler.removeFileOnAbort = true;
                 request.downloadHandler = fileDownloadHandler;

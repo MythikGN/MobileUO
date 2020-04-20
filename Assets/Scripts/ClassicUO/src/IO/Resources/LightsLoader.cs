@@ -52,7 +52,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() => {
+            //return Task.Run(() => {
                 string path = UOFileManager.GetUOFilePath("light.mul");
                 string pathidx = UOFileManager.GetUOFilePath("lightidx.mul");
 
@@ -61,8 +61,8 @@ namespace ClassicUO.IO.Resources
 
                 _file = new UOFileMul(path, pathidx, Constants.MAX_LIGHTS_DATA_INDEX_COUNT);
                 _file.FillEntries(ref Entries);
-
-            });
+                return null;
+                //});
         }
 
 

@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using ClassicUO.Renderer;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.IO.Resources
@@ -62,20 +63,21 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 string path = UOFileManager.GetUOFilePath("Multimap.rle");
 
-                if (File.Exists(path))
+                if (FileSystemHelper.FileExists(path))
                     _file = new UOFile(path, true);
 
-                for (int i = 0; i < 6; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     path = UOFileManager.GetUOFilePath($"facet0{i}.mul");
 
-                    if (File.Exists(path)) _facets[i] = new UOFileMul(path);
+                    if (FileSystemHelper.FileExists(path)) _facets[i] = new UOFileMul(path);
                 }
-            });
+            }//);
+            return null;
         }
 
         public unsafe UOTexture LoadMap(int width, int height, int startx, int starty, int endx, int endy)

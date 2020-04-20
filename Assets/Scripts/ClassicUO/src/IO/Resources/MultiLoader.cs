@@ -64,11 +64,11 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+           // return Task.Run(() =>
             {
                 string uopPath = UOFileManager.GetUOFilePath("MultiCollection.uop");
 
-                if (System.IO.File.Exists(uopPath))
+                /*if (System.IO.File.Exists(uopPath))
                 {
                     Count = Constants.MAX_MULTI_DATA_INDEX_COUNT;
                     _file = new UOFileUop(uopPath, "build/multicollection/{0:D6}.bin");
@@ -76,12 +76,12 @@ namespace ClassicUO.IO.Resources
                     _reader = new DataReader();
                     IsUOP = true;
                 }
-                else
+                else*/
                 {
                     string path = UOFileManager.GetUOFilePath("multi.mul");
                     string pathidx = UOFileManager.GetUOFilePath("multi.idx");
 
-                    if (System.IO.File.Exists(path) && System.IO.File.Exists(pathidx))
+                    if (FileSystemHelper.FileExists(path) && FileSystemHelper.FileExists(pathidx))
                     {
                         _file = new UOFileMul(path, pathidx, Constants.MAX_MULTI_DATA_INDEX_COUNT, 14);
                         Count = _itemOffset = Client.Version >= ClientVersion.CV_7090 ? UnsafeMemoryManager.SizeOf<MultiBlockNew>() + 2 : UnsafeMemoryManager.SizeOf<MultiBlock>();
@@ -90,7 +90,8 @@ namespace ClassicUO.IO.Resources
 
                 _file.FillEntries(ref Entries);
 
-            });
+            }//);
+            return null;
         }
 
         public override void CleanResources()

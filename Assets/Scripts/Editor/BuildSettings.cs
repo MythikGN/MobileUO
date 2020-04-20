@@ -9,6 +9,6 @@ class BuildSettings
 //WebGL
         PlayerSettings.WebGL.linkerTarget = WebGLLinkerTarget.Asm;
         PlayerSettings.WebGL.threadsSupport = false;
-        PlayerSettings.WebGL.memorySize = 1024;//1024;
+        PlayerSettings.WebGL.memorySize = 2032;//1024;
     }
 }

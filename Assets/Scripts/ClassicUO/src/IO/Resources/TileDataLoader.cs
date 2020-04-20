@@ -59,7 +59,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 string path = UOFileManager.GetUOFilePath("tiledata.mul");
 
@@ -257,7 +257,7 @@ namespace ClassicUO.IO.Resources
 
                 string pathdef = UOFileManager.GetUOFilePath("art.def");
 
-                if (File.Exists(pathdef))
+                if (FileSystemHelper.FileExists(pathdef))
                 {
                     using (DefReader reader = new DefReader(pathdef, 1))
                     {
@@ -304,7 +304,8 @@ namespace ClassicUO.IO.Resources
 
                 END_2:
                 tiledata.Dispose();
-            });
+            }//);
+            return null;
         }
 
         public override void CleanResources()

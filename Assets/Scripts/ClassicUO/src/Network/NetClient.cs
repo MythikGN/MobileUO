@@ -157,7 +157,7 @@ namespace ClassicUO.Network
                     StartRecv();
                     
                 };
-                _socket.OnMessage += data => { _recvBuffer = data; Log.Trace("OnMessage callback");
+                _socket.OnMessage += data => { _recvBuffer = data; 
                     ProcessRecv(_recvEventArgs); };
                 _socket.Connect().Wait();
                 Log.Trace("Internal connect finished Connect()" + _socket.State);
@@ -481,7 +481,6 @@ namespace ClassicUO.Network
 
         private void StartRecv()
         {
-            Log.Trace("Start Recv");
 
             return;
             try
@@ -510,7 +509,6 @@ namespace ClassicUO.Network
 
         private void ProcessRecv(SocketAsyncEventArgs e)
         {
-            Log.Trace("ProcessRecv");
 
             int bytesLen = _recvBuffer.Length;
 

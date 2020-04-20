@@ -49,34 +49,35 @@ namespace ClassicUO.IO
             _path = Path.Combine(Application.persistentDataPath,"New Server Configuration");
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            List<Task> tasks = new List<Task>
-            {
-                //AnimationsLoader.Instance.Load(),
-                //AnimDataLoader.Instance.Load(),
-                //ArtLoader.Instance.Load(),
-                //MapLoader.Instance.Load(),
-                ClilocLoader.Instance.Load(Settings.GlobalSettings.ClilocFile),
-                //GumpsLoader.Instance.Load(),
-                FontsLoader.Instance.Load(),
-                HuesLoader.Instance.Load(),
-                //TileDataLoader.Instance.Load(),
-                //MultiLoader.Instance.Load(),
-                //SkillsLoader.Instance.Load().ContinueWith(t => ProfessionLoader.Instance.Load()),
-                //TexmapsLoader.Instance.Load(),
-                //SpeechesLoader.Instance.Load(),
-                //LightsLoader.Instance.Load(),
-                //SoundsLoader.Instance.Load(),
-                //MultiMapLoader.Instance.Load()
-            };
+           // List<Task> tasks = new List<Task>
+           // {
+                //AnimationsLoader.Instance.Load();
+                //AnimDataLoader.Instance.Load();
+                ArtLoader.Instance.Load();
+                MapLoader.Instance.Load();
+                ClilocLoader.Instance.Load(Settings.GlobalSettings.ClilocFile);
+                GumpsLoader.Instance.Load();
+                FontsLoader.Instance.Load();
+                HuesLoader.Instance.Load();
+                TileDataLoader.Instance.Load();
+                MultiLoader.Instance.Load();
+                SkillsLoader.Instance.Load();
+                ProfessionLoader.Instance.Load();
+                TexmapsLoader.Instance.Load();
+                //SpeechesLoader.Instance.Load();
+                LightsLoader.Instance.Load();
+                //SoundsLoader.Instance.Load();
+                MultiMapLoader.Instance.Load();
+           // };
             //TODO any of these cause
-           ArtLoader.Instance.Load();
+           //ArtLoader.Instance.Load();
            //AnimationsLoader.Instance.Load();
-           //MapLoader.Instance.Load();
+          // MapLoader.Instance.Load();
            
            //The below ones work fine, seems like when trying to memorymap a file close or over 100mb it fail
-           GumpsLoader.Instance.Load();
-            FontsLoader.Instance.Load();//.Wait(10000);
-            HuesLoader.Instance.Load();//.Wait(10000);
+          // GumpsLoader.Instance.Load();
+            //FontsLoader.Instance.Load();//.Wait(10000);
+           // HuesLoader.Instance.Load();//.Wait(10000);
             /*if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(240)))
             {
                 Log.Panic("Loading files timeout.");

@@ -33,7 +33,7 @@ namespace ClassicUO.IO.Resources
 {
     internal class MapLoader : UOFileLoader
     {
-        internal static int MAPS_COUNT = 2;
+        internal static int MAPS_COUNT = 1;
         private protected readonly UOFileMul[] _filesIdxStatics = new UOFileMul[MAPS_COUNT];
         private protected readonly UOFile[] _filesMap = new UOFile[MAPS_COUNT];
         private protected readonly UOFileMul[] _filesStatics = new UOFileMul[MAPS_COUNT];
@@ -112,7 +112,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-           // return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 bool foundOneMap = false;
 

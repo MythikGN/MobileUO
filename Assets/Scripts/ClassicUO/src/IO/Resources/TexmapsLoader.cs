@@ -57,7 +57,7 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 string path = UOFileManager.GetUOFilePath("texmaps.mul");
                 string pathidx = UOFileManager.GetUOFilePath("texidx.mul");
@@ -69,8 +69,8 @@ namespace ClassicUO.IO.Resources
                 _file.FillEntries(ref Entries);
                 string pathdef = UOFileManager.GetUOFilePath("TexTerr.def");
 
-                if (!File.Exists(pathdef))
-                    return;
+                if (!FileSystemHelper.FileExists(pathdef))
+                    return null;
 
                 using (DefReader defReader = new DefReader(pathdef))
                 {
@@ -135,8 +135,8 @@ namespace ClassicUO.IO.Resources
                 //        }
                 //    }
                 //}
-            });
-
+            }//);
+            return null;
         }
 
         public override UOTexture GetTexture(uint g)

@@ -62,14 +62,15 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 bool result = false;
 
-                FileInfo file = new FileInfo(UOFileManager.GetUOFilePath("Prof.txt"));
+                
 
-                if (file.Exists)
+                if (FileSystemHelper.FileExists(UOFileManager.GetUOFilePath("Prof.txt")))
                 {
+                    FileInfo file = new FileInfo(UOFileManager.GetUOFilePath("Prof.txt"));
                     if (file.Length > 0x100000) //1megabyte limit of string file
                         throw new InternalBufferOverflowException($"{file.FullName} exceeds the maximum 1Megabyte allowed size for a string text file, please, check that the file is correct and not corrupted -> {file.Length} file size");
 
@@ -115,7 +116,9 @@ namespace ClassicUO.IO.Resources
                     }
                 }
 
-            });
+            }//);
+            return null;
+            
         }
 
         private int GetKeyCode(string key)

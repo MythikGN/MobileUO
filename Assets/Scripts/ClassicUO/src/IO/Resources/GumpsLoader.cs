@@ -56,7 +56,8 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            //return Task.Run(() => {
+            //return Task.Run(() =>
+            {
 
                 string path = UOFileManager.GetUOFilePath("gumpartLegacyMUL.uop");
 
@@ -114,7 +115,7 @@ namespace ClassicUO.IO.Resources
                     }
                 }
                 return null;
-            //});
+            }//);
         }
 
         public override UOTexture16 GetTexture(uint g)

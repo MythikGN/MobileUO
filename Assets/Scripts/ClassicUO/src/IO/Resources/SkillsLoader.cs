@@ -58,10 +58,10 @@ namespace ClassicUO.IO.Resources
 
         public override Task Load()
         {
-            return Task.Run(() =>
+            //return Task.Run(() =>
             {
                 if (SkillsCount > 0)
-                    return;
+                    return null;
 
                 string path = UOFileManager.GetUOFilePath("skills.mul");
                 string pathidx = UOFileManager.GetUOFilePath("Skills.idx");
@@ -89,7 +89,9 @@ namespace ClassicUO.IO.Resources
 
                 SortedSkills.AddRange(Skills);
                 SortedSkills.Sort((a, b) => a.Name.CompareTo(b.Name));
-            });
+            }//);
+            return null;
+            
         }
 
         public int GetSortedIndex(int index)

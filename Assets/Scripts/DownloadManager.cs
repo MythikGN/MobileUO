@@ -11,7 +11,13 @@ namespace ClassicUO
 {
     public  class DownloadManager
     {
-        private static string[] Files = new[] {/*"anim.idx","map0.mul","mapdif0.mul","cliloc.enu","statics0.mul","staidx0.mul", "anim.mul","sound.mul","soundidx.mul", */"light.mul","lightidx.mul", "speech.mul", "unifont.mul", "texidx.mul", "texmaps.mul", "multi.mul","multi.idx","tiledata.mul","radarcol.mul","hues.mul","fonts.mul",  "gumpart.mul", "gumpidx.mul", "art.mul","artidx.mul"};
+        private static string[] Files = new[] {"anim.idx","map0.mul","mapdif0.mul","cliloc.enu","statics0.mul","staidx0.mul", "anim.mul"/*,"sound.mul"*/,"soundidx.mul", 
+            "light.mul","lightidx.mul", "speech.mul", "unifont.mul", "texidx.mul", "texmaps.mul", "multi.mul","multi.idx","tiledata.mul","radarcol.mul","hues.mul",
+            "fonts.mul",  "gumpart.mul", "gumpidx.mul", "art.mul","artidx.mul"
+            ,"tiledata.mul", "art.def", "skills.mul","Skills.idx","Prof.txt","mobtypes.txt",
+            "light.mul", "lightidx.mul","Multimap.rle", "facet00.mul","texmaps.mul","texidx.mul","TexTerr.def",
+            "Anim1.def", "Anim2.def","Equipconv.def","Bodyconv.def","Body.def","Corpse.def"
+        };
         private static int _downLoading = 0;
         public static void DownloadFiles()
         {
